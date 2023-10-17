@@ -1,0 +1,47 @@
+{
+  "Versatile": {
+    "name": "Polyvalent",
+    "child": {
+      "Vintage": "Vintage",
+      "Retro": "Rétro",
+      "Gold": "Or",
+      "Warm": "Chaud",
+      "Cold": "Froid",
+      "Nature": "Nature",
+      "Earth": "Terre",
+      "Sea": "Mer",
+      "Food": "Nourriture",
+      "Tone": "Ton",
+      "Muted": "Muet",
+      "Earthy": "Terrestre"
+    }
+  },
+  "LightThemes": {
+    "name": "Thèmes Clairs",
+    "child": {
+      "Pastel": "Pastel",
+      "Light": "Lumière",
+      "Winter": "Hiver",
+      "Cream": "Crème",
+      "Sky": "Ciel",
+      "Soft": "Doux",
+      "Skin": "Peau",
+      "Desaturated": "Désaturé",
+      "Neutral": "Neutre",
+      "Pastoral": "Pastoral",
+      "Summer": "Été"
+    }
+  },
+  "DarkThemes": {
+    "name": "Thèmes Sombres",
+    "child": {
+      "Dark": "Sombre",
+      "Night": "Nuit",
+      "Coffee": "Café",
+      "Christmas": "Noël",
+      "Deep": "Profond",
+      "Jewel": "Joyau",
+      "Shade": "Ombre"
+    }
+  }
+}

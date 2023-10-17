@@ -1,0 +1,47 @@
+{
+  "Versatile": {
+    "name": "Versatile",
+    "child": {
+      "Vintage": "Vintage",
+      "Retro": "Retro",
+      "Gold": "Gold",
+      "Warm": "Warm",
+      "Cold": "Cold",
+      "Nature": "Nature",
+      "Earth": "Earth",
+      "Sea": "Sea",
+      "Food": "Food",
+      "Tone": "Tone",
+      "Muted": "Muted",
+      "Earthy": "Earthy"
+    }
+  },
+  "LightThemes": {
+    "name": "Light Themes",
+    "child": {
+      "Pastel": "Pastel",
+      "Light": "Light",
+      "Winter": "Winter",
+      "Cream": "Cream",
+      "Sky": "Sky",
+      "Soft": "Soft",
+      "Skin": "Skin",
+      "Desaturated": "Desaturated",
+      "Neutral": "Neutral",
+      "Pastoral": "Pastoral",
+      "Summer": "Summer"
+    }
+  },
+  "DarkThemes": {
+    "name": "Dark Themes",
+    "child": {
+      "Dark": "Dark",
+      "Night": "Night",
+      "Coffee": "Coffee",
+      "Christmas": "Christmas",
+      "Deep": "Deep",
+      "Jewel": "Jewel",
+      "Shade": "Shade"
+    }
+  }
+}

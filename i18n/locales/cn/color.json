@@ -1,0 +1,47 @@
+{
+  "Versatile": {
+    "name": "万用",
+    "child": {
+      "Vintage": "复古",
+      "Retro": "怀旧",
+      "Gold": "金色",
+      "Warm": "温暖",
+      "Cold": "冷",
+      "Nature": "自然",
+      "Earth": "地球",
+      "Sea": "海",
+      "Food": "食物",
+      "Tone": "色调",
+      "Muted": "柔和",
+      "Earthy": "大地色"
+    }
+  },
+  "LightThemes": {
+    "name": "浅色主题",
+    "child": {
+      "Pastel": "粉彩",
+      "Light": "轻",
+      "Winter": "冬季",
+      "Cream": "奶油",
+      "Sky": "天空",
+      "Soft": "柔软",
+      "Skin": "肤色",
+      "Desaturated": "去饱和",
+      "Neutral": "中性",
+      "Pastoral": "田园",
+      "Summer": "夏季"
+    }
+  },
+  "DarkThemes": {
+    "name": "深色主题",
+    "child": {
+      "Dark": "暗",
+      "Night": "夜晚",
+      "Coffee": "咖啡",
+      "Christmas": "圣诞",
+      "Deep": "深",
+      "Jewel": "宝石",
+      "Shade": "阴影"
+    }
+  }
+}
