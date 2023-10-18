@@ -1,8 +1,6 @@
 'use client'
-import {BsBrightnessHigh, BsMoon, BsSearch} from 'react-icons/bs'
 import {HiOutlineSearch} from 'react-icons/hi'
 import { useRef, useState } from "react";
-import styles from './pc.navbar.module.css'
 import {IoLanguage} from 'react-icons/io5'
 import Link from "next/link";
 import { MainMenu } from "./pc.navbar.prop";
@@ -52,7 +50,7 @@ const languages = [
 
 export const Navbar =()=> {
     return(
-        <section className="h-16 flex w-full items-center border">
+        <section className="h-16 flex w-full items-center border sticky top-0 bg-white dark:bg-black">
             <nav className=" flex-[0_0_60%] flex justify-around items-center"><LeftNavbar /></nav>
             <nav className="flex-none w-4/10"><RightNavbar /></nav>
         </section>

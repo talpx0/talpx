@@ -30,7 +30,7 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-                <Navbar />
+              <Navbar />
               <RootStyleRegistry >
                 {children}
               </RootStyleRegistry>

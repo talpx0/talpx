@@ -1,5 +1,4 @@
 
-import ColorSideBox from "./single/[slug]/pc.sidebox"
 import { useDictionary } from "@/i18n"
 import { ParamProps } from "@/app/globalType"
 

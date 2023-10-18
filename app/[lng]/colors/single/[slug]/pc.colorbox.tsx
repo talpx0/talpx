@@ -7,7 +7,7 @@ import { useAppDispatch } from '@/app/redux/clipboard';
 import { addSingleColor } from '@/app/redux/clipboard';
 import Loading from '@/app/widget/loading';
 const fetcher = (url:string) => fetch(url).then((res) => res.json());
-const ITEMS_PER_PAGE = 80;
+const ITEMS_PER_PAGE = 360;
 
 type ToastState = {
     hex: string|null
@@ -30,7 +30,6 @@ export const SingleColorBox =()=> {
     const handlePageChange = (event: any, value:number) => {
     setCurrentPage(value);
     };
-
     const handleClick =(hex:string) => {
         navigator.clipboard.writeText(hex).then(() => setToast({
             hex: hex,

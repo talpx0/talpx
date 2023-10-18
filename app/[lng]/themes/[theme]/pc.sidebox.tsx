@@ -1,7 +1,18 @@
 import { useDictionary } from "@/i18n";
 import Link from "next/link";
 import { ReactNode } from "react";
-import { Button } from "@/components/ui/button";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+  } from "@/components/ui/alert-dialog"
+  import { Button } from "@/components/ui/button"
 
 export default async function ThemeSideBox ({lng, children}:{lng: string, children: ReactNode}){
     const t = await useDictionary(lng, "color");  
@@ -9,7 +20,22 @@ export default async function ThemeSideBox ({lng, children}:{lng: string, childr
     const themeKey = Object.keys(t);
     return (
         <section className="pt-2.5 pb-2.5 pl-2.5 top-13 no-scrollbar w-full">
-              <Button variant="outline" className="w-full">{v.WhyVersatileColor}</Button>
+            <AlertDialog>
+                <AlertDialogTrigger asChild>
+                    <Button variant="outline" className="w-full">{v.WhyVersatileColor}</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                    <AlertDialogTitle>{v.WhyVersatileColor}</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        {v.VersatileColorText}
+                    </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                    <AlertDialogCancel>Close</AlertDialogCancel>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
               <section className=" text-slate-500 dark:text-slate-400 text-xs py-1.5 px-2 ">
                   <section className="flex justify-between items-center">
                       <div>{v.ClipBoard}</div>

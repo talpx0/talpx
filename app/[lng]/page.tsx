@@ -1,9 +1,13 @@
 import { Button } from "@/components/ui/button"
+import { ParamProps } from "../globalType"
+import { useDictionary } from "@/i18n"
+import { CardsContainer } from "./cssCard"
 
  
-export default function Home() {
+export default async function Home({params}:ParamProps) {
   return (
-    <div>
-    </div>
+    <section className="h-dashboard overflow-y-scroll w-full no-scrollbar">
+      <CardsContainer lng={params.lng} />
+    </section>
   )
 }

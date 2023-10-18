@@ -1,5 +1,4 @@
 'use client'
-import { fetcher } from "@/app/util/fetcher"
 import { Toast } from "@/app/widget/toast";
 import { useState } from "react";
 import useSWR from "swr";
@@ -8,6 +7,7 @@ type BoxshadowsProp = {
     id: number|null
     isClicked: boolean
 }
+const fetcher = (url:string) => fetch(url).then((res) => res.json());
 export const ShadowBox =()=> {
     const [showToast, setToast] = useState<BoxshadowsProp>({
         id: null,
