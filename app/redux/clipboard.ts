@@ -21,6 +21,7 @@ const getinitialState = () => {
         }
         return state
     }
+    return null
 }
 
 const initialState = getinitialState() 
