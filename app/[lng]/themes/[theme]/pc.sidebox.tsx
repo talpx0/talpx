@@ -22,7 +22,7 @@ export default async function ThemeSideBox ({lng, children}:{lng: string, childr
         <section className="pt-2.5 pb-2.5 pl-2.5 top-13 no-scrollbar w-full">
             <AlertDialog>
                 <AlertDialogTrigger asChild>
-                    <Button variant="outline" className="w-full">{v.WhyVersatileColor}</Button>
+                    <Button variant="outline">{v.WhyVersatileColor}</Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                     <AlertDialogHeader>

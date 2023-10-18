@@ -6,16 +6,7 @@ import { useReducer, useState } from "react";
 import useSWR, { Fetcher } from "swr";
 import { SecondaryColors, SwrTheme, Theme } from "./themeProp";
 import { Label } from "@/components/ui/label"
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
+
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {

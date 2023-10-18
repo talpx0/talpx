@@ -1,6 +1,4 @@
-import { Button } from "@/components/ui/button"
 import { ParamProps } from "../globalType"
-import { useDictionary } from "@/i18n"
 import { CardsContainer } from "./cssCard"
 
  

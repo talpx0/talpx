@@ -6,5 +6,4 @@ export type ParamProps = {
         slug: string
         theme: string
     }
-    children? : ReactNode
 }
