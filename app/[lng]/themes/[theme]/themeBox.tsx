@@ -2,8 +2,8 @@
 'use client'
 import Loading from "@/app/widget/loading";
 import { useParams } from "next/navigation";
-import { useReducer, useState } from "react";
-import useSWR, { Fetcher } from "swr";
+import { useState } from "react";
+import useSWR from "swr";
 import { SecondaryColors, SwrTheme, Theme } from "./themeProp";
 import { Label } from "@/components/ui/label"
 

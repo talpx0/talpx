@@ -18,6 +18,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         linkbar: 'linear-gradient(135deg, #F3EAF3 0%, #DCE7F9 100%)',
+        cuteCat: "url('/assets/cuteCat.jpg')"
       },
       height: {
         dashboard:'calc(100vh - 64px)',
@@ -28,9 +29,19 @@ module.exports = {
           '50%': { opacity: 0.8 },
           '100%': { opacity: 0 },
         },
+        "accordion-down": {
+          from: { height: 0 },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: 0 },
+        },
       },
       animation: {
         fadeInOut: 'fadeInOut 1s forwards', 
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -71,20 +82,6 @@ module.exports = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: 0 },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: 0 },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
