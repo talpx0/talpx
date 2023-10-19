@@ -10,7 +10,7 @@ type initialStateProp = {
 }
 
 const getinitialState = () => {
-    let state;
+    let state = null;
     if (global?.window !== undefined){
         const clipboard: string | initialStateProp = localStorage.getItem("clipboard") || {
             color: [],

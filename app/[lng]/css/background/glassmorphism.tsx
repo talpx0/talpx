@@ -88,7 +88,6 @@ const glassEffectReducer = (
 };
 
 export const BgContainer =()=> {
-    const { theme } = useTheme()
     const bgImgProps:BgImgStateProps = {
         bgImgDegree: "45deg",
         colorStops: [
@@ -200,7 +199,7 @@ export const BackgroundControl =({
             <LabeledSlider
                 label="Degree"
                 defaultValue={[parseInt(bgImg.bgImgDegree, 10)]}
-                max={100}
+                max={360}
                 step={1}
                 onValueChange={(value) => {
                     dispatch({
