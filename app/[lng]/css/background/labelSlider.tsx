@@ -1,4 +1,5 @@
 import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
 
 type LabeledSliderProps = {
     label: string;
@@ -30,7 +31,7 @@ export const LabeledSlider: React.FC<LabeledSliderProps> = ({
             max={max}
             step={step}
             onValueChange={onValueChange}
-            className={className}
+            className={cn("z-10")}
         />
     </section>
 );

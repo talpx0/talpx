@@ -3,10 +3,11 @@
 import { usePathname } from "next/navigation";
 import { LabeledSlider } from "../../background/labelSlider";
 import { ChangeEvent, Dispatch, ReactElement, useEffect, useMemo, useReducer, useState,useLayoutEffect } from "react";
-import { isLightColor, validateColor } from "@/app/[lng]/util/color";
+import { colorLuminance, isLightColor, validateColor } from "@/app/[lng]/util/color";
 import { css } from "@emotion/react";
 import { Concave, Convex, Flat, Pressed } from "@/components/svg/shadow";
 import { useTheme } from "next-themes";
+import Loading from "@/app/widget/loading";
 
 type ShapeProp = "Flat"|"Concave"|"Convex"|"Pressed"
 type PositionProp = 'top' | 'right' | 'bottom' | 'left';
@@ -16,14 +17,6 @@ type SvgComponentProp = {
     component: ReactElement
 }
 
-
-
-const svgComponents:SvgComponentProp[] = [
-    { id: 0, name: "Flat", component: <Flat /> },
-    { id: 1, name: "Concave", component: <Concave /> },
-    { id: 2, name: "Convex", component: <Convex /> },
-    { id: 3, name: "Pressed", component: <Pressed /> }
-  ];
 
 interface ShadowState {
     blur: number;
@@ -37,6 +30,13 @@ interface ShadowState {
     position: PositionProp;
   }
 
+const svgComponents:SvgComponentProp[] = [
+    { id: 0, name: "Flat", component: <Flat /> },
+    { id: 1, name: "Concave", component: <Concave /> },
+    { id: 2, name: "Convex", component: <Convex /> },
+    { id: 3, name: "Pressed", component: <Pressed /> }
+];
+
 const getSizes = () => {
 if (window.innerWidth < 680 && window.navigator.userAgent !== 'ReactSnap') return { maxSize: 180, size: 150 };
 if (window.innerWidth < 800 && window.navigator.userAgent !== 'ReactSnap') return { maxSize: 250, size: 200 };
@@ -44,31 +44,6 @@ if ((window.innerWidth < 1000 || window.innerHeight < 860) && window.navigator.u
 return { maxSize: 410, size: 300 };
 }
 
-export function colorLuminance(hex: string, lum: number = 0): string {
-    // Ensure hex is a string and has a valid format
-    if (typeof hex !== 'string' || !/^#?[0-9a-f]{3,6}$/i.test(hex)) {
-        return '#FFFFFF';  // Return white as default
-    }
-    
-    // Ensure hex has a consistent 6-digit format
-    hex = hex.charAt(0) === '#' ? hex.slice(1) : hex;
-    if (hex.length === 3) {
-        hex = hex.split('').map(char => char + char).join('');
-    }
-
-    // Extract and adjust RGB components
-    const adjustColor = (color: number): string => {
-        let adjusted = Math.round(color * (1 + lum));
-        adjusted = Math.max(0, Math.min(255, adjusted));  // Clamp between 0 and 255
-        return adjusted.toString(16).padStart(2, '0');    // Convert to hex and ensure 2 characters
-    };
-
-    const red = adjustColor(parseInt(hex.slice(0, 2), 16));
-    const green = adjustColor(parseInt(hex.slice(2, 4), 16));
-    const blue = adjustColor(parseInt(hex.slice(4, 6), 16));
-
-    return `#${red}${green}${blue}`;
-}
 
 
 const determineRadius = (currentRadius:string, newSize:number, oldSize:number) => {
@@ -217,14 +192,28 @@ const getBgImage =(color:string, shape:ShapeProp, degree:string):BgImageResult =
 
 
 export const BoxShadowTool =()=> {
+    const [mounted, setMounted] = useState(false) 
+    useEffect(() => {
+        setMounted(true)
+      }, [])
+      if (!mounted) {
+        return <Loading />
+      }
+    return (
+        <BoxShadowContainer  />
+    )  
+}
+
+
+export const BoxShadowContainer =()=> {
+    const {theme, setTheme } = useTheme()
     const pathname = usePathname()!;
     const lastIndex = pathname.lastIndexOf('#');
-    const {theme, setTheme } = useTheme()
-
     let defaultColor: string|undefined = pathname.slice(lastIndex);
     if (!/^#[0-9A-F]{6}$/i.test(defaultColor)) {
         defaultColor = undefined; 
     }
+
     const lightState: ShadowState = {
         blur: 60,
         color: defaultColor || '#e0e0e0',
@@ -248,13 +237,10 @@ export const BoxShadowTool =()=> {
         codeString: "",
         position: "top"    
     };
-    const [shadow, dispatch] = useReducer(reducer, theme === "light" ? lightState : darkState)
-    useEffect(() => {
-        const initialThemeState = theme === "light" ? lightState : darkState;
-        dispatch({ type: "SET_THEME_STATE", payload: initialThemeState });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [theme]);
     
+    const [shadow, dispatch] = useReducer(reducer, theme === "light" ? lightState : darkState)
+
+
     useEffect(()=>{
         isLightColor(shadow.color) ? setTheme("light"): setTheme("dark")
     },[shadow.color, setTheme])
@@ -321,7 +307,6 @@ export const BoxShadowTool =()=> {
         </>
     )
 }
-
 
 
 export const BoxShadowExample =({

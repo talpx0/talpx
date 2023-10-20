@@ -20,7 +20,7 @@ export const Drawer = ({ children, open, setOpen }: { children: ReactNode, open:
             <section> 
                 <section
                     ref={drawerRef}
-                    className={`fixed bg-background left-0 transition-all duration-500 ease-in-out p-5 shadow-lg rounded-b-xl z-20 w-full h-[300px] ${open ? 'top-13' : 'top-[-300px]'}`}
+                    className={`fixed bg-background left-0 transition-all duration-500 ease-in-out p-5 shadow-lg rounded-b-xl w-full h-[300px] z-50 ${open ? 'top-13' : 'top-[-300px]'}`}
                 >
                     {children}
                 </section>

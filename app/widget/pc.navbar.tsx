@@ -63,7 +63,6 @@ function replacePathSegment(url: string, newLang: string): string {
     return url.replace(/^\/[^\/]+/, `${newLang}`);
 }
 
-
 export const RightNavbar =()=> {
     const {theme, setTheme} = useTheme()
     const inputRef = useRef<HTMLInputElement>(null!)
@@ -125,7 +124,7 @@ export const RightNavbar =()=> {
                 open={open}
                 setOpen={setOpen} >
                     <Button>Search</Button>
-                    dffdfdfdfdf
+
             </Drawer>
         </>
     );
