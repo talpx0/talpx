@@ -238,28 +238,23 @@ export const BoxShadowTool =()=> {
     };
 
     const darkState: ShadowState = {
-        blur: 60,
-        color: defaultColor || '#373a5c',
+        blur: 14,
+        color: "#373a5c",
         size: 300,
-        radius: "50px",
+        radius: "17px",
         shape: "Flat",
-        distance: 20,
-        colorDifference: 0.15,
-        codeString: '',
-        position: 'top' ,      
+        distance: 7,
+        colorDifference: 0.19,
+        codeString: "",
+        position: "top"    
     };
     const [shadow, dispatch] = useReducer(reducer, theme === "light" ? lightState : darkState)
-    useEffect(()=>{
-        const initialTheme = theme === "light" ? lightState : darkState
-        dispatch(
-            {
-                type: "SET_THEME_STATE",
-                payload: initialTheme
-            }
-        )
+    useEffect(() => {
+        const initialThemeState = theme === "light" ? lightState : darkState;
+        dispatch({ type: "SET_THEME_STATE", payload: initialThemeState });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[theme])
-
+    }, [theme]);
+    
     useEffect(()=>{
         isLightColor(shadow.color) ? setTheme("light"): setTheme("dark")
     },[shadow.color, setTheme])
@@ -352,6 +347,7 @@ const BoxShadowBox =({
 )=> {
     const [input, setInput] = useState(shadowState.color)
     const [selectedId, setSelectedId] = useState<number>(0);
+    useEffect(()=>{setInput(shadowState.color)},[shadowState.color])
     const handleChangeColor = (event: ChangeEvent<HTMLInputElement>) => {
         const color = event.target.value
         setInput(color);
