@@ -2,10 +2,12 @@
 'use client'
 import { usePathname } from "next/navigation";
 import { LabeledSlider } from "../../background/labelSlider";
-import { ChangeEvent, Dispatch, ReactElement, useMemo, useReducer, useState } from "react";
-import { validateColor } from "@/app/[lng]/util/color";
+import { ChangeEvent, Dispatch, ReactElement, useEffect, useMemo, useReducer, useState,useLayoutEffect } from "react";
+import { isLightColor, validateColor } from "@/app/[lng]/util/color";
 import { css } from "@emotion/react";
 import { Concave, Convex, Flat, Pressed } from "@/components/svg/shadow";
+import { useTheme } from "next-themes";
+
 type ShapeProp = "Flat"|"Concave"|"Convex"|"Pressed"
 type PositionProp = 'top' | 'right' | 'bottom' | 'left';
 type SvgComponentProp = {
@@ -13,6 +15,8 @@ type SvgComponentProp = {
     name: ShapeProp
     component: ReactElement
 }
+
+
 
 const svgComponents:SvgComponentProp[] = [
     { id: 0, name: "Flat", component: <Flat /> },
@@ -67,7 +71,6 @@ export function colorLuminance(hex: string, lum: number = 0): string {
 }
 
 
-
 const determineRadius = (currentRadius:string, newSize:number, oldSize:number) => {
     if (currentRadius.includes('%')) return "50%";
 
@@ -89,6 +92,7 @@ type Action =
   | { type: 'SET_RADIUS'; payload: string}
   | { type: 'SET_BLUR'; payload: number}
   | { type: 'SET_BG_COLOR'; payload: string}
+  | { type: 'SET_THEME_STATE'; payload: ShadowState}
 
 const reducer = (state:ShadowState, action:Action) => {
     switch (action.type) {
@@ -136,6 +140,8 @@ const reducer = (state:ShadowState, action:Action) => {
             return {...state, blur: action.payload }
         case 'SET_BG_COLOR':
             return {...state, color: action.payload} 
+        case 'SET_THEME_STATE':
+            return action.payload
         default:
             return state;
     }
@@ -213,11 +219,13 @@ const getBgImage =(color:string, shape:ShapeProp, degree:string):BgImageResult =
 export const BoxShadowTool =()=> {
     const pathname = usePathname()!;
     const lastIndex = pathname.lastIndexOf('#');
+    const {theme, setTheme } = useTheme()
+
     let defaultColor: string|undefined = pathname.slice(lastIndex);
     if (!/^#[0-9A-F]{6}$/i.test(defaultColor)) {
         defaultColor = undefined; 
     }
-    const initialState: ShadowState = {
+    const lightState: ShadowState = {
         blur: 60,
         color: defaultColor || '#e0e0e0',
         size: 300,
@@ -228,7 +236,34 @@ export const BoxShadowTool =()=> {
         codeString: '',
         position: 'top' ,      
     };
-    const [shadow, dispatch] = useReducer(reducer, initialState)
+
+    const darkState: ShadowState = {
+        blur: 60,
+        color: defaultColor || '#373a5c',
+        size: 300,
+        radius: "50px",
+        shape: "Flat",
+        distance: 20,
+        colorDifference: 0.15,
+        codeString: '',
+        position: 'top' ,      
+    };
+    const [shadow, dispatch] = useReducer(reducer, theme === "light" ? lightState : darkState)
+    useEffect(()=>{
+        const initialTheme = theme === "light" ? lightState : darkState
+        dispatch(
+            {
+                type: "SET_THEME_STATE",
+                payload: initialTheme
+            }
+        )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[theme])
+
+    useEffect(()=>{
+        isLightColor(shadow.color) ? setTheme("light"): setTheme("dark")
+    },[shadow.color, setTheme])
+
     const { darkColor, lightColor } = useMemo(() => {
         return {
             darkColor: colorLuminance(shadow.color, shadow.colorDifference * -1),
@@ -320,9 +355,6 @@ const BoxShadowBox =({
     const handleChangeColor = (event: ChangeEvent<HTMLInputElement>) => {
         const color = event.target.value
         setInput(color);
-        if (color === ''){
-            setInput("#FFFFFF")
-        }
         if (validateColor(color)){
             dispatch({
                 type: "SET_BG_COLOR",
@@ -437,4 +469,8 @@ const BoxShadowBox =({
     )
 }
   
+
+function uselayoutEffect(arg0: () => void) {
+    throw new Error("Function not implemented.");
+}
   
