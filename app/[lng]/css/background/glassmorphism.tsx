@@ -3,12 +3,11 @@
 import { cn } from "@/lib/utils"
 import { Slider } from "@/components/ui/slider"
 import { css } from '@emotion/react'
-import { ChangeEvent, Dispatch, useReducer } from "react"
+import { ChangeEvent, Dispatch, useEffect, useReducer, useRef, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Toggle } from "@radix-ui/react-toggle"
 import {BsX} from "react-icons/bs"
 import { LabeledSlider } from "./labelSlider"
-import { useTheme } from "next-themes"
 
 export type ColorStop = {
     color: string;
@@ -107,6 +106,7 @@ export const BgContainer =()=> {
         blur: "5px",
         glassBgColor: "rgb(255, 255, 255)",
     }
+
     const [bgImgState, imgDispatch] = useReducer(bgImgReducer, bgImgProps)
     const [glassEffect, glassDispatch] = useReducer(glassEffectReducer, glassEffectProps)
 
@@ -153,7 +153,7 @@ export const BgContainer =()=> {
     )
 }
 
-export const BackgroundControl =({
+const BackgroundControl =({
     bgImg, 
     dispatch
 }:{
