@@ -99,7 +99,7 @@ const reducer = (state:ShadowState, action:Action) => {
             if (state.radius.includes('%')) {
                 return {
                     ...state,
-                    radius: "50%"
+                    radius: `${action.payload}px`
                 };
             } else if (state.size < (2 * parseInt(state.radius))) {
                 return {
@@ -209,6 +209,7 @@ const getBgImage =(color:string, shape:ShapeProp, degree:string):BgImageResult =
     }
 }
 
+
 export const BoxShadowTool =()=> {
     const pathname = usePathname()!;
     const lastIndex = pathname.lastIndexOf('#');
@@ -263,11 +264,16 @@ export const BoxShadowTool =()=> {
         <>
         <section css={css` background: ${shadow.color};`} className="h-dashboard flex flex-col">
             <section className="h-14 w-full"></section>
-            <section className="flex flex-row h-full w-full">
-                <section className="flex-[0_0_60%]">
+            <section className="flex flex-row h-full w-full p-5">
+                <section className="w-1/2 flex items-center justify-center p-10 ">
+                    <section css={css`${boxStyles} 
+                        width: ${shadow.size}px ; 
+                        height: ${shadow.size}px; 
+                        border-radius: ${shadow.radius}; `} >
+                    </section>
                 </section> 
-                <section className="flex-[0_0_40%] p-12 flex justify-around">
-                    <section className="h-full w-full rounded-lg py-6 px-5" css={css`${boxStyles}`}>
+                <section className="w-1/2 p-12 flex justify-around">
+                    <section className="h-full w-full rounded-lg p-10" css={css`${boxStyles}`}>
                         <BoxShadowBox shadowState={shadow} dispatch={dispatch} />
                         <div className="my-4 whitespace-pre-line font-mono border py-5 px-2
                         bg-black text-white text-xs rounded-sm relative dark:text-white dark:border-none ">
@@ -288,6 +294,18 @@ export const BoxShadowTool =()=> {
 
 
 
+export const BoxShadowExample =({
+    shadowState,
+    dispatch 
+ }:{
+    shadowState:ShadowState,
+    dispatch: Dispatch<Action>;
+ })=> {
+    return <section css={css`background-color:${shadowState.color};`}>
+        
+    </section>
+}
+
 
 const BoxShadowBox =({
    shadowState,
@@ -298,7 +316,7 @@ const BoxShadowBox =({
 }
 )=> {
     const [input, setInput] = useState(shadowState.color)
-    const [selectedId, setSelectedId] = useState<number>(1);
+    const [selectedId, setSelectedId] = useState<number>(0);
     const handleChangeColor = (event: ChangeEvent<HTMLInputElement>) => {
         const color = event.target.value
         setInput(color);
