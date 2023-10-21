@@ -6,9 +6,9 @@ export const validateColor = (color: string) => {
     return false;
 }
 
-export const isLightColor = (hexColor?: string): boolean => {
+const calculateLuminance = (hexColor?: string): number | null => {
     if (!hexColor || typeof hexColor !== "string" || !/^#[0-9a-fA-F]{6}$/.test(hexColor)) {
-        return false; // Return 'false' for any invalid or undefined input
+        return null; // Return null for invalid input
     }
 
     // Convert hex string to RGB
@@ -21,13 +21,25 @@ export const isLightColor = (hexColor?: string): boolean => {
     g = (g <= 0.04045) ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
     b = (b <= 0.04045) ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
 
-    // Calculate relative luminance
-    const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    // Return the calculated luminance
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
 
-    // Return true if the color is light, false if it's dark
+export const isLightColor = (hexColor?: string): boolean => {
+    const luminance = calculateLuminance(hexColor);
+    if (luminance === null) {
+        return false;
+    }
     return luminance > 0.5;
 }
 
+export const getColorType = (hexColor?: string): "light" | "dark" => {
+    const luminance = calculateLuminance(hexColor);
+    if (luminance === null) {
+        return "dark";
+    }
+    return luminance > 0.5 ? "light" : "dark";
+}
 
 export function colorLuminance(hex: string, lum: number = 0): string {
     // Ensure hex is a string and has a valid format

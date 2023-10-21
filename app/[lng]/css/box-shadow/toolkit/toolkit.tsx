@@ -2,12 +2,14 @@
 'use client'
 import { usePathname } from "next/navigation";
 import { LabeledSlider } from "../../background/labelSlider";
-import { ChangeEvent, Dispatch, ReactElement, useEffect, useMemo, useReducer, useState,useLayoutEffect } from "react";
-import { colorLuminance, isLightColor, validateColor } from "@/app/[lng]/util/color";
+import { ChangeEvent, Dispatch, ReactElement, useEffect, useMemo, useReducer, useState} from "react";
+import { colorLuminance, getColorType, isLightColor, validateColor } from "@/app/[lng]/util/color";
 import { css } from "@emotion/react";
 import { Concave, Convex, Flat, Pressed } from "@/components/svg/shadow";
 import { useTheme } from "next-themes";
 import Loading from "@/app/widget/loading";
+import shadowIcons from "./offsetIcon";
+
 
 type ShapeProp = "Flat"|"Concave"|"Convex"|"Pressed"
 type PositionProp = 'top' | 'right' | 'bottom' | 'left';
@@ -240,6 +242,17 @@ export const BoxShadowContainer =()=> {
     
     const [shadow, dispatch] = useReducer(reducer, theme === "light" ? lightState : darkState)
 
+    useEffect(()=>{
+        if (getColorType(shadow.color) !== theme ){
+            const updatedTheme = theme === "light" ? lightState : darkState
+            dispatch({
+                type: 'SET_THEME_STATE',
+                payload: updatedTheme
+            })
+        }
+        return
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[theme])
 
     useEffect(()=>{
         isLightColor(shadow.color) ? setTheme("light"): setTheme("dark")
@@ -281,15 +294,11 @@ export const BoxShadowContainer =()=> {
         <section css={css` background: ${shadow.color};`} className="h-dashboard flex flex-col">
             <section className="h-14 w-full"></section>
             <section className="flex flex-row h-full w-full p-5">
-                <section className="w-1/2 flex items-center justify-center p-10 ">
-                    <section css={css`${boxStyles} 
-                        width: ${shadow.size}px ; 
-                        height: ${shadow.size}px; 
-                        border-radius: ${shadow.radius}; `} >
-                    </section>
+                <section className="w-1/2 flex items-center justify-center p-20 ">
+                    <BoxShadowPreview shadow={shadow} dispatch={dispatch} boxStyles={boxStyles} />
                 </section> 
                 <section className="w-1/2 p-12 flex justify-around">
-                    <section className="h-full w-full rounded-lg p-10" css={css`${boxStyles}`}>
+                    <section className="h-full w-full rounded-lg p-10 max-w-lg mr-auto" css={css`${boxStyles}`}>
                         <BoxShadowBox shadowState={shadow} dispatch={dispatch} />
                         <div className="my-4 whitespace-pre-line font-mono border py-5 px-2
                         bg-black text-white text-xs rounded-sm relative dark:text-white dark:border-none ">
@@ -309,15 +318,47 @@ export const BoxShadowContainer =()=> {
 }
 
 
-export const BoxShadowExample =({
-    shadowState,
-    dispatch 
+export const BoxShadowPreview =({
+    shadow,
+    dispatch,
+    boxStyles,
  }:{
-    shadowState:ShadowState,
-    dispatch: Dispatch<Action>;
+    shadow:ShadowState,
+    dispatch: Dispatch<Action>,
+    boxStyles: string,
  })=> {
-    return <section css={css`background-color:${shadowState.color};`}>
-        
+    const {theme, setTheme } = useTheme()
+    const [clickedIconId, setClickedIconId] = useState<number | null>(0);
+    const handleIconClick = (id: number, position: PositionProp) => {
+        setClickedIconId(id);
+        dispatch(
+            {
+                type:'SET_POSITION',
+                payload: position
+            }
+        )
+    };
+    return <section className="relative w-full h-full flex items-center justify-center">
+            {shadowIcons.map(icon => (
+                <div 
+                    key={icon.id} 
+                    className={`absolute text-3xl
+                    ${icon.id === 0 ? 'top-0 left-0' : ''} 
+                    ${icon.id === 1 ? 'top-0 right-0' : ''} 
+                    ${icon.id === 2 ? 'bottom-0 left-0' : ''} 
+                    ${icon.id === 3 ? 'bottom-0 right-0' : ''} 
+                    ${theme === "light" ? 'text-black': 'text-white'}
+                    `} 
+                    onClick={() => handleIconClick(icon.id, icon.position)}
+                >
+                    {clickedIconId === icon.id ? icon.filled : icon.outlined}
+                </div>
+            ))}
+            <section css={css`${boxStyles} 
+                            width: ${shadow.size}px ; 
+                            height: ${shadow.size}px; 
+                            border-radius: ${shadow.radius};`} >
+            </section>
     </section>
 }
 
@@ -451,7 +492,4 @@ const BoxShadowBox =({
 }
   
 
-function uselayoutEffect(arg0: () => void) {
-    throw new Error("Function not implemented.");
-}
   
