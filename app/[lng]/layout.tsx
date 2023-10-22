@@ -2,9 +2,10 @@ import '../globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from '@/components/theme-provider'
-import { Navbar } from '../widget/pc.navbar'
+import { Navbar, Navgation } from '../widget/pc.navbar'
 import { ReduxProvider } from '../redux/storeProvider'
 import RootStyleRegistry from '../context/emotion'
+import { NavbarProvider } from '../context/navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -30,9 +31,11 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <Navbar />
               <RootStyleRegistry >
-                {children}
+                  <NavbarProvider>
+                    <Navgation />
+                    {children}
+                  </NavbarProvider>
               </RootStyleRegistry>
             </ThemeProvider>
           </ReduxProvider>

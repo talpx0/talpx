@@ -9,6 +9,7 @@ import { Concave, Convex, Flat, Pressed } from "@/components/svg/shadow";
 import { useTheme } from "next-themes";
 import Loading from "@/app/widget/loading";
 import shadowIcons from "./offsetIcon";
+import { useNavbar } from "@/app/context/navbar";
 
 
 type ShapeProp = "Flat"|"Concave"|"Convex"|"Pressed"
@@ -140,14 +141,14 @@ const getDirectionData = (distance: number, position: 'top' | 'right' | 'bottom'
         };
         case "bottom":
         return {
-            first: [`-${distance}px`, `-${distance}px`],
-            second: [`${distance}px`, `${distance}px`],
+            first: [`${distance}px`, `-${distance}px`],
+            second: [`-${distance}px`, `${distance}px`],
             degree: "315deg"
         };
         case "left":
         return {
-            first: [`${distance}px`, `-${distance}px`],
-            second: [`-${distance}px`, `${distance}px`],
+            first: [`-${distance}px`, `-${distance}px`],
+            second: [`${distance}px`, `${distance}px`],
             degree: "45deg"
         };
         default:
@@ -291,7 +292,7 @@ export const BoxShadowContainer =()=> {
     }
     return(
         <>
-        <section css={css` background: ${shadow.color};`} className="h-dashboard flex flex-col">
+        <section css={css`background: ${shadow.color};`} className="flex flex-col h-dashboard">
             <section className="h-14 w-full"></section>
             <section className="flex flex-row h-full w-full p-5">
                 <section className="w-1/2 flex items-center justify-center p-20 ">
@@ -371,6 +372,7 @@ const BoxShadowBox =({
    dispatch: Dispatch<Action>;
 }
 )=> {
+    const {dispatch:navbarDispatch} = useNavbar()
     const [input, setInput] = useState(shadowState.color)
     const [selectedId, setSelectedId] = useState<number>(0);
     useEffect(()=>{setInput(shadowState.color)},[shadowState.color])
@@ -382,6 +384,14 @@ const BoxShadowBox =({
                 type: "SET_BG_COLOR",
                 payload: event.target.value
             });
+            navbarDispatch(
+                {
+                    type: 'SET_COLOR',
+                    payload:  `background-color: ${event.target.value};
+                        .dark & {
+                    background-color: ${event.target.value};`
+                }
+            )
         }
     }
     return(
@@ -461,11 +471,11 @@ const BoxShadowBox =({
                     });
                 }}
             />
-           <section className="w-full flex rounded-sm overflow-hidden ">
+           <section className="w-full flex rounded-sm  h-11 overflow-visible">
             {svgComponents.map((item) => (
-                    <section className="relative w-1/4 " key={item.id}> 
+                    <section className="w-1/4 group" key={item.id}> 
                     <button
-                        className={`transition duration-300 h-11 w-full flex ease-in-out items-center justify-center ${
+                        className={`transition duration-300 h-11 w-full flex ease-in-out items-center justify-center  ${
                             selectedId === item.id 
                                 ? 'bg-indigo-600 text-white border-indigo-600' 
                                 : 'bg-gray-400 text-black hover:bg-gray-300'
@@ -484,8 +494,11 @@ const BoxShadowBox =({
                             {item.component}
                         </div>
                     </button>
+                    <div className=" text-center opacity-0 text-sm group-hover:opacity-100 transition-opacity relative z-10 bg-slate-800 text-white">
+                        {item.name} 
+                    </div>
                     </section>
-                ))}
+             ))}
            </section>
         </section>
     )

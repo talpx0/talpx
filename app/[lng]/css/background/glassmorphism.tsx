@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Toggle } from "@radix-ui/react-toggle"
 import {BsX} from "react-icons/bs"
 import { LabeledSlider } from "./labelSlider"
+import { useNavbar } from "@/app/context/navbar"
 
 export type ColorStop = {
     color: string;
@@ -87,6 +88,7 @@ const glassEffectReducer = (
 };
 
 export const BgContainer =()=> {
+    const {dispatch} = useNavbar()
     const bgImgProps:BgImgStateProps = {
         bgImgDegree: "45deg",
         colorStops: [
@@ -107,6 +109,7 @@ export const BgContainer =()=> {
         glassBgColor: "rgb(255, 255, 255)",
     }
 
+
     const [bgImgState, imgDispatch] = useReducer(bgImgReducer, bgImgProps)
     const [glassEffect, glassDispatch] = useReducer(glassEffectReducer, glassEffectProps)
 
@@ -115,12 +118,21 @@ export const BgContainer =()=> {
     .join(', ');
 
     const backgroundImageCss = `
-    background-image: linear-gradient(${bgImgState.bgImgDegree}, ${gradientStops});
+        background-image: linear-gradient(${bgImgState.bgImgDegree}, ${gradientStops});
     `;
-
     const glassEffectCss = `backdrop-filter: blur(${glassEffect.blur});
         background-color: ${`${glassEffect.glassBgColor.slice(0, -1)},${glassEffect.bgTransparent})`};
     `;
+
+    useEffect(()=>{
+        const gradientClasses = `bg-[${bgImgState.colorStops[0].color}]`;
+        dispatch({
+            type: 'SET_LIGHT_COLOR',
+            payload: gradientClasses
+        })
+    },[bgImgState.colorStops, dispatch])
+
+
     const handleCopy = () => {
         navigator.clipboard.writeText(backgroundImageCss)
             .then(() => {
@@ -191,7 +203,7 @@ const BackgroundControl =({
                             type="text" 
                             value={stop.color} 
                             onChange={(event) => handleChangeColor(event, index)} 
-                            className="w-20 mx-1 bg-transparent border-b-2 border-gray-600 focus:outline-none focus:border-blue-500"
+                            className="w-20 mx-1 bg-transparent border-b-2 border-gray-600 focus:outline-none focus:border-indigo-600"
                         />
                     </section>
                 ))}

@@ -6,6 +6,7 @@ export const validateColor = (color: string) => {
     return false;
 }
 
+
 const calculateLuminance = (hexColor?: string): number | null => {
     if (!hexColor || typeof hexColor !== "string" || !/^#[0-9a-fA-F]{6}$/.test(hexColor)) {
         return null; // Return null for invalid input

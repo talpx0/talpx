@@ -86,4 +86,7 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
+  corePlugins: {
+    transitionProperty: true,
+  },
 }
