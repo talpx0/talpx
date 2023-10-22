@@ -1,8 +1,8 @@
-import { BgContainer, } from "./glassmorphism"
+import { BackgroundTool, BgContainer, } from "./glassmorphism"
 
 const Page =()=> {
     return  <div>
-        <BgContainer />
+        <BackgroundTool />
     </div>
 }
 

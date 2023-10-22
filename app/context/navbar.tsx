@@ -15,7 +15,7 @@ type NavbarState = {
 
 type NavbarAction =
     | { type: 'SET_COLOR'; payload: string }
-    | { type: 'SET_NAVBAR_STATE'; payload: "navbar" | "toolbar" };
+    | { type: 'SET_NAVBAR_STATE'; payload: "navbar" | "toolbar"};
 
 const NavbarContext = createContext<NavbarContextType | undefined>(undefined);
 

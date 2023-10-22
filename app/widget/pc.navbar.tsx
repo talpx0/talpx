@@ -55,7 +55,7 @@ export const Navgation =()=> {
     return(
         <>
             {navbarState.navbarState === "navbar" ? <Navbar /> : <Toolbar /> }
-            <Button className={`top-4 right-4 h-14 aspect-square rounded-full fixed text-2xl z-10 ${navbarState.navbarState === 'navbar' ? 'invisible' : ''} `}
+            <Button className={`top-4 right-4 h-13 aspect-square rounded-full fixed text-2xl z-10 ${navbarState.navbarState === 'navbar' ? 'invisible' : ''} `}
                     onClick={
                         ()=>dispatch({
                             type: 'SET_NAVBAR_STATE',
@@ -71,7 +71,7 @@ export const Navgation =()=> {
 export const Navbar =()=> {
     return (
         <section  className={`
-                    h-16 flex w-full items-center border-b sticky top-0 bg-white
+                    h-14 flex w-full items-center border-b sticky top-0 bg-white
                     dark:bg-black
                     `}
             >
@@ -86,7 +86,7 @@ export const Navbar =()=> {
 export const Toolbar =()=> {
     const {navbarState, dispatch} = useNavbar() 
     return(
-        <section className="h-16 flex w-full items-center sticky top-0 border-b"
+        <section className="h-14 flex w-full items-center sticky top-0 border-b"
                 css={css`${navbarState.color}`}     
         ></section>
     )

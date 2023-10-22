@@ -213,6 +213,7 @@ export const BoxShadowContainer =()=> {
     const pathname = usePathname()!;
     const lastIndex = pathname.lastIndexOf('#');
     let defaultColor: string|undefined = pathname.slice(lastIndex);
+    const {dispatch:navbarDispatch} = useNavbar()
     if (!/^#[0-9A-F]{6}$/i.test(defaultColor)) {
         defaultColor = undefined; 
     }
@@ -259,6 +260,17 @@ export const BoxShadowContainer =()=> {
         isLightColor(shadow.color) ? setTheme("light"): setTheme("dark")
     },[shadow.color, setTheme])
 
+    useEffect(()=>{
+        navbarDispatch(
+            {
+                type: 'SET_COLOR',
+                payload:  `background-color: ${shadow.color};
+                    .dark & {
+                background-color: ${shadow.color};`
+            }
+        )
+    },[shadow.color,navbarDispatch])
+
     const { darkColor, lightColor } = useMemo(() => {
         return {
             darkColor: colorLuminance(shadow.color, shadow.colorDifference * -1),
@@ -286,9 +298,6 @@ export const BoxShadowContainer =()=> {
             .then(() => {
                 console.log('Text copied to clipboard');
             })
-            .catch(err => {
-                console.error('Could not copy text: ', err);
-            });
     }
     return(
         <>

@@ -21,7 +21,7 @@ module.exports = {
         cuteCat: "url('/assets/cuteCat.jpg')"
       },
       height: {
-        dashboard:'calc(100vh - 64px)',
+        dashboard:'calc(100vh - 56px)',
       },
       keyframes: {
         fadeInOut: {
@@ -37,11 +37,18 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        'growAndFade': {
+          '0%': { opacity: '0', height: '20%' },
+          '40%': { opacity: '1', height: '100%' },
+          '80%': { opacity: '1', height: '100%' },
+          '100%': { opacity: '0', height: '0px' }
+        }
       },
       animation: {
         fadeInOut: 'fadeInOut 1s forwards', 
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        'growAndFade': 'growAndFade 1s forwards'
       },
       colors: {
         border: "hsl(var(--border))",
