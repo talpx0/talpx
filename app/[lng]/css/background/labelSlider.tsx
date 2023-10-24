@@ -22,7 +22,7 @@ export const LabeledSlider: React.FC<LabeledSliderProps> = ({
     min,
     value
 }) => (
-    <section className="flex items-center my-4">
+    <section className="flex items-center my-4 relative">
         <div className="text-sm font-bold mr-2 w-24">{label}:</div>
         <Slider
             min={min}
@@ -35,3 +35,5 @@ export const LabeledSlider: React.FC<LabeledSliderProps> = ({
         />
     </section>
 );
+
+ {/*<div className="text-xs border mx-2 absolute right-[-50px] bg-white dark:bg-black p-2 rounded-2xl " >{value}</div>-->*/}

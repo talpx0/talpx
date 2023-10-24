@@ -1,6 +1,9 @@
+'use client'
+import { useEffect, useState } from "react";
+
 const letters = ['T', 'A', 'L', 'P', 'X'];
 
-const Loading = () => {
+export const LoadingState = () => {
   return (
     <div className="flex space-x-3 items-center justify-center min-h-screen w-full">
       {letters.map((letter, index) => (
@@ -16,4 +19,26 @@ const Loading = () => {
   );
 };
 
-export default Loading;
+
+
+interface LoadingBoxProps {
+  element: JSX.Element;
+}
+
+export const LoadingBox: React.FC<LoadingBoxProps> = ({ element }) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+      setMounted(true);
+  }, []);
+
+  if (!mounted) {
+      return <LoadingState />;
+  }
+
+  return (
+      <>
+          {element}
+      </>
+  );
+}

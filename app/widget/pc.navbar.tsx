@@ -17,8 +17,8 @@ import {
   } from "@/components/ui/dropdown-menu"
 import { Moon, Sun } from "lucide-react"
 import { useNavbar } from "../context/navbar";
-import {IoIosExpand} from 'react-icons/io'
 import { TbLayoutNavbarExpandFilled } from "react-icons/tb";
+import {LiaToolsSolid} from "react-icons/lia"
 import { css } from "@emotion/react";
 const languages = [
     {
@@ -159,7 +159,7 @@ export const RightNavbar =()=> {
                         type: 'SET_NAVBAR_STATE',
                         payload: "toolbar"
                     })}>
-                    <IoIosExpand />
+                    <LiaToolsSolid />
                 </Button>
             </section>
         </>

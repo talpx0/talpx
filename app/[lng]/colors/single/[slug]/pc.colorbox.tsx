@@ -5,7 +5,7 @@ import useSWR from 'swr';
 import { useParams } from 'next/navigation';
 import { useAppDispatch } from '@/app/redux/clipboard';
 import { addSingleColor } from '@/app/redux/clipboard';
-import Loading from '@/app/widget/loading';
+import {LoadingState} from '@/app/widget/loading';
 const fetcher = (url:string) => fetch(url).then((res) => res.json());
 const ITEMS_PER_PAGE = 360;
 
@@ -23,7 +23,7 @@ export const SingleColorBox =()=> {
     });
     const { data, error } = useSWR(`/api/color/${params.slug}`, fetcher);
     if (error) return <div>Failed to load {error}</div>;
-    if (!data) return <Loading />;
+    if (!data) return <LoadingState />;
     if (data.error) return <div>Error not such file {data.error.message}</div>
     const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
     const currentdata = data.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);

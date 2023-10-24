@@ -12,8 +12,8 @@ const CopyToClipboard = ({ content }:{content:string}) => {
     };
 
     return (
-        <div className="my-4 whitespace-pre-line font-mono border py-5 px-2
-            bg-black text-white text-xs rounded-sm relative dark:text-white dark:border-none ">
+        <div className="my-4 font-mono border py-5 px-2
+            bg-black text-white text-xs rounded-sm relative dark:text-white dark:border-none whitespace-pre-line">
             <button className="absolute right-0 text-white top-0 px-3 py-[2px] bg-indigo-600"
                     onClick={handleCopy}
             >

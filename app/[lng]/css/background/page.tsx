@@ -1,4 +1,4 @@
-import { BackgroundTool, BgContainer, } from "./glassmorphism"
+import { BackgroundTool } from "./gradient"
 
 const Page =()=> {
     return  <div>

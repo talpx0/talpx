@@ -9,9 +9,8 @@ import { Toggle } from "@radix-ui/react-toggle"
 import {BsX} from "react-icons/bs"
 import { LabeledSlider } from "./labelSlider"
 import { useTheme } from "next-themes"
-import Loading from "@/app/widget/loading"
+import {LoadingState} from "@/app/widget/loading"
 import CopyToClipboard from "@/app/widget/clipboard"
-
 export type ColorStop = {
     color: string;
     percent: number;
@@ -22,11 +21,6 @@ type BgImgStateProps = {
     colorStops: ColorStop[]
 }
 
-type GlassEffectProps = {
-    bgTransparent: number;
-    blur: string;
-    glassBgColor: string;
-}
 type BgImgAction =
   | { type: "UPDATE_BG_IMG_DEGREE"; payload: string }
   | { type: "ADD_COLOR_STOP"}
@@ -35,10 +29,6 @@ type BgImgAction =
   | { type: "UPDATE_COLOR_PERCENT"; payload: { index: number, value: number } }
   | { type: "SET_THEME_STATE";  payload: BgImgStateProps };
 
-type GlassEffectAction =
-    | { type: "UPDATE_TRANSPARENT"; payload: number }
-    | { type: "UPDATE_BLUR"; payload: string }
-    | { type: "UPDATE_GLASS_BG_COLOR"; payload: string };
 
     const bgImgReducer = (
         state: BgImgStateProps,
@@ -96,21 +86,6 @@ type GlassEffectAction =
         }
     };
 
-const glassEffectReducer = (
-    state: GlassEffectProps,
-    action: GlassEffectAction
-): GlassEffectProps => {
-    switch (action.type) {
-        case "UPDATE_TRANSPARENT":
-            return { ...state, bgTransparent: action.payload };
-        case "UPDATE_BLUR":
-            return { ...state, blur: action.payload };
-        case "UPDATE_GLASS_BG_COLOR":
-            return { ...state, glassBgColor: action.payload };
-        default:
-            return state;
-    }
-};
 
 export const BackgroundTool =()=> {
     const [mounted, setMounted] = useState(false) 
@@ -118,43 +93,36 @@ export const BackgroundTool =()=> {
         setMounted(true)
       }, [])
       if (!mounted) {
-        return <Loading />
+        return <LoadingState />
       }
     return (
         <BgContainer  />
     )  
 }
 
+
 export const BgContainer =()=> {
-    const {theme, setTheme } = useTheme()
+    const {theme} = useTheme()
     const bgImgProps = useMemo(() => {
         return {
             bgImgDegree: "45deg",
             colorStops: [
-                { color: "#2b2e4a", percent: 0 },
+                { color: "#E8DBFC", percent: 0 },
                 { color: "#c4caef", percent: 50 }
             ]
         };
     }, []);
+
     const darkBgImgProps = useMemo(() => {
         return {
-            bgImgDegree: "180deg",  // Gradient direction
+            bgImgDegree: "45deg",  // Gradient direction
             colorStops: [
-                { color: "#463f3a", percent: 0 },  // Start color
+                { color: "#061d45", percent: 0 },  // Start color
                 { color: "#2b2e4a", percent: 50 }   // Mid color
             ]
         };
     }, []);
-    const glassEffectProps = {
-        bgTransparent: 0.5,
-        blur: "5px",
-        glassBgColor: "rgb(255, 255, 255)",
-    }
-
     const [bgImgState, imgDispatch] = useReducer(bgImgReducer, theme === "light" ? bgImgProps : darkBgImgProps)
-
-    const [glassEffect, glassDispatch] = useReducer(glassEffectReducer, glassEffectProps)
-
     useEffect(()=>{
         const updateTheme = theme === "light" ? bgImgProps : darkBgImgProps
         imgDispatch(
@@ -164,33 +132,28 @@ export const BgContainer =()=> {
             }
         )
     },[bgImgProps, darkBgImgProps, theme])
-     
+
     const gradientStops = bgImgState.colorStops
     .map( stop => `${stop.color} ${stop.percent}%`)
     .join(', ');
 
     const backgroundImageCss = `background-image: linear-gradient(${bgImgState.bgImgDegree}, ${gradientStops});
     `;
-    const glassEffectCss = `backdrop-filter: blur(${glassEffect.blur}); 
-    background-color: ${`${glassEffect.glassBgColor.slice(0, -1)},${glassEffect.bgTransparent})`};
-    `;
+    
     return (
         <section className="h-dashboard flex" css={css`${backgroundImageCss}`} >
-            <section className="h-52 w-52 flex-[0_0_60%]">
+            <section className="w-1/2 flex items-center justify-center p-10 ">
             </section>
-            <section className="flex-[0_0_40%] p-12 flex justify-around">
-                <section className="w-full h-full rounded-lg bg-cuteCat object-cover">
-                    <section className="w-full h-full py-10 px-5 rounded-lg" css={css`${glassEffectCss}`}>
+            <section className="w-1/2 p-12 flex justify-around">
+                <section className="h-full w-full rounded-lg p-10 max-w-lg mr-auto border">
                         <BackgroundControl bgImg={bgImgState} dispatch={imgDispatch}/>
                         <CopyToClipboard content={backgroundImageCss} />
-                        <GlassEffectControl glassEffect={glassEffect} dispatch={glassDispatch} />
-                        <CopyToClipboard content={glassEffectCss} />
-                    </section>
                 </section>
             </section>
         </section>
     )
 }
+
 
 const BackgroundControl =({
     bgImg, 
@@ -275,47 +238,5 @@ const BackgroundControl =({
             ))}
             {bgImg.colorStops.length < 4 && <Button className="w-full my-3" onClick={handleAddColor}>Add more color</Button>}
         </section>
-    );
-}
-
-export const GlassEffectControl = ({
-    glassEffect,
-    dispatch
-}:{
-    glassEffect: GlassEffectProps,
-    dispatch: Dispatch<any>
-}) => {
-    return (
-        <>
-            <section>
-                <h4>Glass Effect</h4>
-                <LabeledSlider
-                    label="Opaque"
-                    defaultValue={[glassEffect.bgTransparent * 100]}
-                    max={100}
-                    step={5}
-                    onValueChange={(value) => {
-                        dispatch({
-                            type: "UPDATE_TRANSPARENT",
-                            payload: value[0] / 100
-                        });
-                    }}
-                    className={cn()}
-                />
-                <LabeledSlider
-                    label="Blur"
-                    defaultValue={[parseInt(glassEffect.blur, 10)]}
-                    max={50}
-                    step={1}
-                    onValueChange={(value) => {
-                        dispatch({
-                            type: "UPDATE_BLUR",
-                            payload: `${value[0]}px`
-                        });
-                    }}
-                    className={cn()}
-                />
-            </section>
-        </>
     );
 }

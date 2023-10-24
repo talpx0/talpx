@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@codesandbox/sandpack-react": "^2.9.0",
     "@emotion/react": "^11.11.1",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -21,6 +22,8 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-toggle": "^1.0.3",
+    "@react-spectrum/color": "^3.0.0-beta.27",
+    "@react-stately/color": "^3.4.4",
     "@reduxjs/toolkit": "^1.9.7",
     "@types/react-redux": "^7.1.27",
     "accept-language": "^3.0.18",
@@ -31,7 +34,7 @@
     "next": "13.4.9",
     "next-themes": "^0.2.1",
     "react": "^18",
-    "react-color": "^2.19.3",
+    "react-colorful": "^5.6.1",
     "react-cookie": "^6.1.1",
     "react-dom": "^18",
     "react-icons": "^4.11.0",

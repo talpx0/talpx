@@ -7,9 +7,11 @@ import { colorLuminance, getColorType, isLightColor, validateColor } from "@/app
 import { css } from "@emotion/react";
 import { Concave, Convex, Flat, Pressed } from "@/components/svg/shadow";
 import { useTheme } from "next-themes";
-import Loading from "@/app/widget/loading";
 import shadowIcons from "./offsetIcon";
 import { useNavbar } from "@/app/context/navbar";
+import {LoadingState} from "@/app/widget/loading";
+import CopyToClipboard from "@/app/widget/clipboard";
+import { HexColorPicker } from "react-colorful";
 
 
 type ShapeProp = "Flat"|"Concave"|"Convex"|"Pressed"
@@ -72,28 +74,17 @@ type Action =
   | { type: 'SET_BG_COLOR'; payload: string}
   | { type: 'SET_THEME_STATE'; payload: ShadowState}
 
+
 const reducer = (state:ShadowState, action:Action) => {
     switch (action.type) {
         case 'SET_COLOR':
             window.history.replaceState('homepage', 'Title', '/' + action.payload);
             return { ...state, color: action.payload };
         case 'SET_RADIUS':
-            if (state.radius.includes('%')) {
                 return {
                     ...state,
                     radius: `${action.payload}px`
                 };
-            } else if (state.size < (2 * parseInt(state.radius))) {
-                return {
-                    ...state,
-                    radius: "50%"
-                };
-            } else {
-                return {
-                    ...state,
-                    radius: `${action.payload}px`
-                };
-            }
         case 'SET_DISTANCE':
             return { ...state, distance: action.payload, blur: action.payload * 2 };
     
@@ -123,7 +114,7 @@ const reducer = (state:ShadowState, action:Action) => {
         default:
             return state;
     }
-  };
+};
   
 const getDirectionData = (distance: number, position: 'top' | 'right' | 'bottom' | 'left') => {
     switch (position) {
@@ -200,7 +191,7 @@ export const BoxShadowTool =()=> {
         setMounted(true)
       }, [])
       if (!mounted) {
-        return <Loading />
+        return <LoadingState />
       }
     return (
         <BoxShadowContainer  />
@@ -286,39 +277,22 @@ export const BoxShadowContainer =()=> {
         return getBgImage(shadow.color, shadow.shape, degree);
     }, [shadow.color, shadow.shape, degree]);      
     
-    const boxStyles = `background:     ${shadowImg};
-        box-shadow: ${insert} ${first[0]} ${first[1]} ${shadow.blur}px ${darkColor},
-                    ${insert} ${second[0]} ${second[1]} ${shadow.blur}px ${lightColor};
-        `;
-
-    const boxRoundStyles = `border-radius: ${shadow.radius};`;
+    const boxStyles = `background: ${shadowImg};
+    box-shadow:${insert} ${first[0]} ${first[1]} ${shadow.blur}px ${darkColor},${insert} ${second[0]} ${second[1]} ${shadow.blur}px ${lightColor};`;
+    const boxRoundStyles = shadow.size < (2 * parseInt(shadow.radius))?`border-radius: 50%;`:`border-radius: ${shadow.radius};`
     const combinedStyles = `${boxStyles} ${boxRoundStyles}`;
-    const handleCopy = () => {
-        navigator.clipboard.writeText(combinedStyles)
-            .then(() => {
-                console.log('Text copied to clipboard');
-            })
-    }
     return(
         <>
         <section css={css`background: ${shadow.color};`} className="flex flex-col h-dashboard">
             <section className="h-14 w-full"></section>
             <section className="flex flex-row h-full w-full p-5">
-                <section className="w-1/2 flex items-center justify-center p-20 ">
+                <section className="w-1/2 flex items-center justify-center p-10 ">
                     <BoxShadowPreview shadow={shadow} dispatch={dispatch} boxStyles={boxStyles} />
                 </section> 
                 <section className="w-1/2 p-12 flex justify-around">
                     <section className="h-full w-full rounded-lg p-10 max-w-lg mr-auto" css={css`${boxStyles}`}>
                         <BoxShadowBox shadowState={shadow} dispatch={dispatch} />
-                        <div className="my-4 whitespace-pre-line font-mono border py-5 px-2
-                        bg-black text-white text-xs rounded-sm relative dark:text-white dark:border-none ">
-                            <button className="absolute right-0 text-white top-0 px-3 py-[2px] bg-indigo-600"
-                                onClick={handleCopy}
-                                >
-                                Copy
-                            </button>
-                            {combinedStyles}
-                        </div>
+                        <CopyToClipboard content={combinedStyles} />
                     </section>
                 </section> 
             </section>
@@ -383,6 +357,7 @@ const BoxShadowBox =({
 )=> {
     const {dispatch:navbarDispatch} = useNavbar()
     const [input, setInput] = useState(shadowState.color)
+    const [dropdown, setDropdown] = useState(false)
     const [selectedId, setSelectedId] = useState<number>(0);
     useEffect(()=>{setInput(shadowState.color)},[shadowState.color])
     const handleChangeColor = (event: ChangeEvent<HTMLInputElement>) => {
@@ -403,11 +378,42 @@ const BoxShadowBox =({
             )
         }
     }
+    const colorPickerCss = `
+        .react-colorful__hue {
+            height: 15px;
+            border-radius: 0 0 0px 0px;
+        }
+    `
     return(
         <section className="">
             <section className="flex-[0_0_50%] flex items-center text-sm font-bold my-2">
                         <div>Background Color:</div>
-                        <div className="w-5 h-5 mx-1 border border-slate-950 dark:border-slate-50" css={css`background-color:${shadowState.color};`}></div>
+                        <div>
+                            <div className="w-5 h-5 mx-1 border border-slate-950 dark:border-slate-50" 
+                                css={css`background-color:${ shadowState.color};`}
+                                onClick={()=> setDropdown(true) }
+                                >
+                            </div>
+                            
+                            {dropdown &&
+                                <div 
+                                    className="absolute z-20 px-4 bg-none" 
+                                    onMouseLeave={() => setDropdown(false)}
+                                >
+                                    <div className=" bg-white dark:bg-black border rounded-xl ">
+                                        <HexColorPicker
+                                        css={css`${colorPickerCss}`}
+                                        color={shadowState.color}  onChange={(newColor) => {
+                                            dispatch({
+                                                type: 'SET_BG_COLOR',
+                                                payload: newColor
+                                            })
+                                        }}/>
+                                        <div className="p-3 text-xs">Current Color: {shadowState.color} </div>
+                                    </div>
+                            </div>  
+                            }
+                        </div>
                         <input 
                             type="text" 
                             value={input} 
@@ -417,7 +423,7 @@ const BoxShadowBox =({
                 </section>
             <LabeledSlider
                 label="Size"
-                defaultValue={[shadowState.size]}
+                value={[shadowState.size]}
                 max={360}
                 min={5}
                 step={1}
@@ -430,7 +436,7 @@ const BoxShadowBox =({
             />
             <LabeledSlider
                 label="Radius"
-                defaultValue={[parseInt(shadowState.radius, 10)]}
+                value={[parseInt(shadowState.radius, 10)]}
                 max={180}
                 step={1}
                 onValueChange={(value) => {

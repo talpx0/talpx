@@ -16,9 +16,12 @@ module.exports = {
       },
     },
     extend: {
+      clipPath: {
+        triangle: 'polygon(100% 0%, 0% 50%, 100% 100%)',
+      },
       backgroundImage: {
         linkbar: 'linear-gradient(135deg, #F3EAF3 0%, #DCE7F9 100%)',
-        cuteCat: "url('/assets/cuteCat.jpg')"
+        cuteCat: "url('/assets/background.jpg')"
       },
       height: {
         dashboard:'calc(100vh - 56px)',
