@@ -1,6 +1,6 @@
 'use client'
 
-import LoadingState from "@/app/widget/loading"
+import {LoadingState} from "@/app/widget/loading"
 import { useEffect, useState } from "react"
 
 

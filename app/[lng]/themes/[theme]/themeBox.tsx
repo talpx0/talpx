@@ -1,28 +1,11 @@
 /** @jsxImportSource @emotion/react */
 'use client'
-import Loading from "@/app/widget/loading";
+import {LoadingState} from "@/app/widget/loading";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import useSWR from "swr";
 import { SecondaryColors, SwrTheme, Theme } from "./themeProp";
-import { Label } from "@/components/ui/label"
-
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import {BiErrorCircle} from "react-icons/bi"
 import Link from "next/link";
 import { css } from '@emotion/react'
@@ -83,7 +66,7 @@ export const ThemeBox =()=> {
 
     const { data, error } = useSWR<SwrTheme, string>(`/api/theme/${params.theme}`, fetcher);
     if (error) return <div>Failed to load {error}</div>;
-    if (!data) return <Loading />;
+    if (!data) return <LoadingState />;
     if (data.error) return <div>Error not such file {data.error.message}</div>
     return(
         <>

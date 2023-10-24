@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 const letters = ['T', 'A', 'L', 'P', 'X'];
 
-export const LoadingState = () => {
+ export const LoadingState = () => {
   return (
     <div className="flex space-x-3 items-center justify-center min-h-screen w-full">
       {letters.map((letter, index) => (
