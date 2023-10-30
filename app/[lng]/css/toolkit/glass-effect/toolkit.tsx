@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 'use client'
-import {  Dispatch, useEffect, useMemo, useReducer} from "react"
-import { LabeledSlider } from "../../background/labelSlider";
+import {  Dispatch, useEffect, useMemo, useReducer, useState} from "react"
+import { LabeledSlider } from "../background/labelSlider";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useTheme } from "next-themes";
@@ -18,7 +18,7 @@ type GlassEffectProps = {
 }
 
 type GlassEffectAction =
-    | { type: "UPDATE_TRANSPARENT"; payload: number }
+    | { type: "SET_TRANSPARENT"; payload: number }
     | { type: "UPDATE_BLUR"; payload: string }
     | { type: "UPDATE_GLASS_BG_COLOR"; payload: string }
     | { type: "SET_BACKGROUND_IMAGE"; payload: string }
@@ -30,7 +30,7 @@ type GlassEffectAction =
         action: GlassEffectAction
     ): GlassEffectProps => {
         switch (action.type) {
-            case "UPDATE_TRANSPARENT":
+            case "SET_TRANSPARENT":
                 return { ...state, bgTransparent: action.payload };
             case "UPDATE_BLUR":
                 return { ...state, blur: action.payload };
@@ -68,7 +68,6 @@ export const GlassEffectContainer =()=>{
     },[])
 
     const [glassEffectState, glassDispatch] = useReducer(glassEffectReducer, theme === "light" ? whiteGlassProps: darkGlassProps)
-    
     useEffect(()=>{
         const updateGlassEffect = theme === "light" ? whiteGlassProps : darkGlassProps
         glassDispatch(
@@ -107,6 +106,7 @@ export const GlassEffectControl = ({
     glassEffect: GlassEffectProps,
     dispatch: Dispatch<GlassEffectAction>
 }) => {
+    const [dropdown, setDropdown] = useState(false)
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files && event.target.files[0];
         if (file) {
@@ -123,6 +123,16 @@ export const GlassEffectControl = ({
         <>
             <section>
                 <h4>Glass Effect</h4>
+                <div>Background Color:</div>
+                        <div>
+                            <div className="w-5 h-5 mx-1 border border-slate-950 dark:border-slate-50" 
+                                css={css`background-color:${ glassEffect.glassBgColor};`}
+                                onClick={()=> setDropdown(true) }
+                                >
+                            </div>
+
+                        </div>
+                        
                 <LabeledSlider
                     label="Opaque"
                     defaultValue={[glassEffect.bgTransparent * 100]}
@@ -130,7 +140,7 @@ export const GlassEffectControl = ({
                     step={5}
                     onValueChange={(value) => {
                         dispatch({
-                            type: "UPDATE_TRANSPARENT",
+                            type: "SET_TRANSPARENT",
                             payload: value[0] / 100
                         });
                     }}

@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic"
 
 const DynamicComponent = dynamic(() =>
-  import('../toolkit/toolkit').then((mod) => mod.BoxShadowTool))
+  import('./toolkit').then((mod) => mod.BoxShadowTool))
 
 const Page =()=> {
     return (

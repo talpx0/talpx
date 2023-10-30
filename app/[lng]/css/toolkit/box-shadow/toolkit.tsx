@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 'use client'
 import { usePathname } from "next/navigation";
-import { LabeledSlider } from "../../background/labelSlider";
+import { LabeledSlider } from "../background/labelSlider";
 import { ChangeEvent, Dispatch, ReactElement, useEffect, useMemo, useReducer, useState} from "react";
 import { colorLuminance, getColorType, isLightColor, validateColor } from "@/app/[lng]/util/color";
 import { css } from "@emotion/react";
-import { Concave, Convex, Flat, Pressed } from "@/components/svg/shadow";
+import { Concave, Convex, Flat, Pressed } from "@/components/svg/offestIcon";
 import { useTheme } from "next-themes";
 import shadowIcons from "./offsetIcon";
 import { useNavbar } from "@/app/context/navbar";
@@ -359,7 +359,6 @@ const BoxShadowBox =({
     const [input, setInput] = useState(shadowState.color)
     const [dropdown, setDropdown] = useState(false)
     const [selectedId, setSelectedId] = useState<number>(0);
-    useEffect(()=>{setInput(shadowState.color)},[shadowState.color])
     const handleChangeColor = (event: ChangeEvent<HTMLInputElement>) => {
         const color = event.target.value
         setInput(color);
@@ -394,7 +393,6 @@ const BoxShadowBox =({
                                 onClick={()=> setDropdown(true) }
                                 >
                             </div>
-                            
                             {dropdown &&
                                 <div 
                                     className="absolute z-20 px-4 bg-none" 

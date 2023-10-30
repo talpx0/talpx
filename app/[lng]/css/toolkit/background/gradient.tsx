@@ -11,6 +11,8 @@ import { LabeledSlider } from "./labelSlider"
 import { useTheme } from "next-themes"
 import {LoadingState} from "@/app/widget/loading"
 import CopyToClipboard from "@/app/widget/clipboard"
+import { ColorPicker } from "@/app/widget/colorPicker"
+import { HexColorPicker } from "react-colorful"
 export type ColorStop = {
     color: string;
     percent: number;
@@ -53,8 +55,8 @@ type BgImgAction =
                     colorStops: state.colorStops.filter((_, index) => index !== action.payload)
                 };
             case "UPDATE_COLOR_STOP":
-            const updatedStops = [...state.colorStops];
-            updatedStops[action.payload.index] = action.payload.colorStop;
+                const updatedStops = [...state.colorStops];
+                updatedStops[action.payload.index] = action.payload.colorStop;
                 return { ...state, colorStops: updatedStops };
             case "SET_THEME_STATE":
                 return action.payload
@@ -170,7 +172,6 @@ const BackgroundControl =({
           payload: { index: index, colorStop: updatedStops[index] }
         });
     };
-
     const handleAddColor = () => {
         dispatch( { type: "ADD_COLOR_STOP"});
     }
@@ -188,7 +189,20 @@ const BackgroundControl =({
                 {bgImg.colorStops.map((stop, index) => (
                     <section key={index} className="flex-[0_0_50%] flex items-center text-sm font-bold my-2">
                         <div>{`Color\u00A0${index + 1}:`}</div>
-                        <div className="w-5 h-5 mx-1 border" css={css`background-color:${stop.color};`}></div>
+                        <ColorPicker 
+                            initialColor={stop.color} 
+                            component={ 
+                            <HexColorPicker 
+                                color={stop.color}
+                                onChange={(color)=>{
+                                    const updatedStops = [...bgImg.colorStops];
+                                    updatedStops[index].color = color;
+                                    dispatch({
+                                        type: "UPDATE_COLOR_STOP",
+                                        payload: { index: index, colorStop: updatedStops[index] }
+                                    });
+                                }} />} 
+                         />
                         <input 
                             type="text" 
                             value={stop.color} 
